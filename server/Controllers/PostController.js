@@ -28,6 +28,7 @@ const addPost=async(req,res)=>{
 }
 module.exports={getPosts,addPost} */
 
+const { request } = require("express");
 const Movie = require("../models/Post");
 //post
 const PostMovie=async(request,response)=>{
@@ -35,7 +36,8 @@ const PostMovie=async(request,response)=>{
     try {
         const newMovie=new Movie({
             title:request.body.title,
-            rate:request.body.rate
+            rate:request.body.rate,
+            addedId:request.body.addedId
         })
         await newMovie.save();
         response.status(200).json({message:'movie add successfully',movie:newMovie})
@@ -45,13 +47,23 @@ const PostMovie=async(request,response)=>{
 }
 const searchMovie=async(request,response)=>{
     //elementMovie.title.toLowerCase().includes(caracter.toLowerCase()))
-    const search=request.body;
+    // const search=request.body;
+    const {title}=request.body
     try {
-        const movies =await Movie.find();
-        const filteredMovies=await movies.filter((elt)=>elt.title.toLowerCase().includes(request.body.search))
-        response.status(200).json({movies:filteredMovies})
+        const movies =await Movie.find({title:{$in: 'x'}});
+         const filteredMovies= movies.filter((elt)=>elt.title.toLowerCase().includes(request.body.search)) 
+  /*       response.status(200).json({movies:filteredMovies}) */
+  console.log(movies)
     } catch (error) {
         console.log(error)
     }
 }
-module.exports={PostMovie,searchMovie}
+const getMovies=async(request,response)=>{
+    try {
+      const movies=await Movie.find();
+      response.status(200).json({movies})
+    } catch (error) {
+        console.log(error)
+    }
+}
+module.exports={PostMovie,searchMovie,getMovies}

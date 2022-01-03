@@ -1,6 +1,6 @@
 const express=require('express');
 const router=express.Router();
-const {PostMovie,searchMovie}=require('../Controllers/PostController')
+const {PostMovie,searchMovie,getMovies}=require('../Controllers/PostController')
 const isAuth=require('../midelware/isAuth')
 const upload = require('../midelware/uploads');
 
@@ -8,6 +8,8 @@ const upload = require('../midelware/uploads');
 router.post('/',isAuth,addPost) */
 router.post('/s',PostMovie)
 router.post('/',searchMovie)
+router.get('/',getMovies)
+
 
 
 

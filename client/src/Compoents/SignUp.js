@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { register } from "../Redux/action/AuthActions";
 import { useDispatch } from "react-redux";
-import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
-import AuthReducer from './../Redux/Reducers/AuthReducer';
-
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import AuthReducer from "./../Redux/Reducers/AuthReducer";
 const SignUp = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [image, setImage] = useState(null);
+
+
   const [user, setUser] = useState({
     username: " ",
     email: " ",
@@ -16,21 +18,28 @@ const SignUp = () => {
   const handleChange = (event) => {
     setUser({ ...user, [event.target.id]: event.target.value });
   };
+  
 
   const onSubmit = (event) => {
+    
     event.preventDefault();
-    dispatch(register(user,navigate));
-    console.log(user)
+    let formData=new FormData()
+  formData.append('username',user.username)
+  formData.append('email',user.email)
+  formData.append('password',user.password)
+  formData.append('image',image) 
+  
+    dispatch(register(formData ,navigate));
+/* 
     setUser({
       username: " ",
       email: " ",
       password: " ",
-    });
+    }); */
   };
-  
-  
+
   return (
-    <form onSubmit={onSubmit}>
+    <form encType="multerpart/form-data" onSubmit={onSubmit}>
       <div className="form-group">
         <label for="username">Username</label>
         <input
@@ -66,6 +75,15 @@ const SignUp = () => {
           placeholder="Password"
         />
       </div>
+      <input
+        accept="image/*"
+        /*  value={image}  */
+        onChange={(event) => setImage(event.target.files[0])}
+        type="file"
+        className="form-control"
+        id="image"
+        placeholder="Password"
+      />
 
       <button type="submit" className="btn btn-primary">
         Submit

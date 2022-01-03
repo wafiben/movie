@@ -18,6 +18,9 @@ const movieSchema=mongoose.Schema({
     rate:{
         type:Number,
         required:true
+    },
+    addedId:{
+        type:String
     }
 })
 module.exports=mongoose.model('Movie',movieSchema)

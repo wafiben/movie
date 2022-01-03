@@ -2,7 +2,9 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const registerController = async (request, response) => {
+  console.log(request.file)
   let user = request.body;
+  console.log(request.file.filename)
   try {
     const searchedUser = await User.findOne({ email: user.email });
     if (searchedUser) {
@@ -10,6 +12,7 @@ const registerController = async (request, response) => {
     }
     const hashedPasword = await bcrypt.hash(user.password, 10);
     const newUser = await new User({
+     image:request.file.filename,
       username: user.username,
       email: user.email,
       password: hashedPasword,
